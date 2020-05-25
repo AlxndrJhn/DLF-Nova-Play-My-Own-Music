@@ -13,7 +13,7 @@ def create_model():
     # Construct model
     model = Sequential()
 
-    model.add(Dense(256, input_shape=(80,)))
+    model.add(Dense(256, input_shape=(40,)))
     model.add(Activation('relu'))
     model.add(Dropout(0.5))
 
