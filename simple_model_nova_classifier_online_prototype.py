@@ -162,19 +162,23 @@ while True:
     mapping = {"p": "news", "m": "music"}
 
     switch_msg = ""
-    if play_music and (switch_signal > 0.9 or first_prediction):
+    date = str(datetime.now()).replace(':','-').replace('.', '-')
+    file_name = f"{date}_{mapping[classification]}.mp3"
+    if play_music and (switch_signal > 0.9 or (first_prediction and class_val == 1)):
         first_prediction = False
         play_music = False
         switch_msg = "switch to radio"
         stop_music()
         start_radio()
+        cropped.export(file_name, format="mp3")
 
-    elif not play_music and (switch_signal < 0.1 or first_prediction):
+    elif not play_music and (switch_signal < 0.1 or (first_prediction and class_val == 0)):
         first_prediction = False
         play_music = True
         switch_msg = "switch to music"
         stop_radio()
         start_music()
+        cropped.export(file_name, format="mp3")
 
     print(
         f"{datetime.now()} Classification: {mapping[classification]:>6}, prob.: {probability*100:3.0f}%, filtered signal: {switch_signal*100: 3.0f}%, AI performance: {performance:4.1f}Hz {switch_msg}"
