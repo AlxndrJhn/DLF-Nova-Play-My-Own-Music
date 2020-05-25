@@ -44,11 +44,11 @@ if __name__ == "__main__":
                 features_test.append([chunk_feature, label])
 
         features_train_df = pd.DataFrame(features_train, columns=["feature", "class_label"])
-        features_train_df.to_pickle("saved_features_train.pickle")
+        features_train_df.to_pickle("nova_classifier/saved_features_train.pickle")
         print(f"Saved {len(features_train_df)} rows to disk for training")
 
         features_test_df = pd.DataFrame(features_test, columns=["feature", "class_label"])
-        features_test_df.to_pickle("saved_features_test.pickle")
+        features_test_df.to_pickle("nova_classifier/saved_features_test.pickle")
         print(f"Saved {len(features_train_df)} rows to disk for testing")
 # %%
 # output[0].shape

@@ -27,7 +27,7 @@ labels.head()
 # load model
 from simple_model import load_trained_model
 
-model = load_trained_model("nova_classifier/model_saves/weights.best.basic_cnn.hdf5")
+model = load_trained_model("nova_classifier/model_saves/weights.best.basic_cnn_40.hdf5")
 model.summary()
 
 
