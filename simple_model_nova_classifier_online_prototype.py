@@ -21,9 +21,6 @@ path_mp3 = dataset_path / f"{dataset_id:02}.mp3"
 chunk_path = dataset_path / f"{dataset_id:02}_split"
 
 # %%
-labels = pandas.read_csv(path_labels, sep="\t", header=None, names=["start", "end", "annotation"], dtype=dict(start=float, end=float, annotation=str))
-labels.head()
-# %%
 # load model
 from simple_model import load_trained_model
 
@@ -35,23 +32,21 @@ model.summary()
 # test with validation dataset
 import pandas as pd
 
-featuresdf = pd.read_pickle("nova_classifier/data_chunks_df.pickle")
+featuresdf = pd.read_pickle("nova_classifier/saved_features_test.pickle")
 
 from sklearn.preprocessing import LabelEncoder
 from keras.utils import to_categorical
 
 # Convert features and corresponding classification labels into numpy arrays
-X = np.array(featuresdf.feature.tolist())
-y = np.array(featuresdf.class_label.tolist())
+x_test = np.array(featuresdf.feature.tolist())
+y_test = np.array(featuresdf.class_label.tolist())
 
 # Encode the classification labels
 le = LabelEncoder()
-yy = to_categorical(le.fit_transform(y))
+y_test = to_categorical(le.fit_transform(y_test))
 
 # split the dataset
 from sklearn.model_selection import train_test_split
-
-x_train, x_test, y_train, y_test = train_test_split(X, yy, test_size=0.2, random_state=42)
 
 score = model.evaluate(x_test, y_test, verbose=1)
 accuracy = 100 * score[1]
@@ -61,17 +56,21 @@ print("Model accuracy: %.4f%%" % accuracy)
 # %%
 # online
 def classify_sound_chunk(sound_chunk):
+    sound_chunk = sound_chunk.set_frame_rate(44100)
     channels = 2
     samples = [float(x) for x in sound_chunk.get_array_of_samples()]
     stacked = np.vstack((samples[0::channels], samples[1::channels]))
     data = simple_model_feature.extract_features(stacked, sound_chunk.frame_rate)
 
-    prediction = model.predict_classes(data.reshape(1, 80))[0]
-    if prediction == 0:
+    p = model.predict_proba(data.reshape(1, 40))[0]
+
+    if p[0] > p[1]:
         prediction_label = "m"
+        probability = p[0]
     else:
         prediction_label = "p"
-    return prediction_label
+        probability = p[1]
+    return prediction_label, probability
 
 
 # %%
@@ -90,6 +89,7 @@ def stop_music():
         sp.pause_playback()
     except:
         pass
+
 
 def start_music():
     sp.start_playback()
@@ -153,8 +153,8 @@ while True:
     cropped = concat_audio[-10000:]
     buffer = [cropped]
     start = datetime.now()
-    classification = classify_sound_chunk(cropped)
-    performance = 1/(datetime.now()-start).microseconds*1000000
+    classification, probability = classify_sound_chunk(cropped)
+    performance = 1 / (datetime.now() - start).microseconds * 1000000
 
     class_val = 0 if classification == "m" else 1
     switch_signal = switch_signal_factor * switch_signal + (1 - switch_signal_factor) * class_val
@@ -176,6 +176,8 @@ while True:
         stop_radio()
         start_music()
 
-    print(f"{datetime.now()} Classification: {mapping[classification]:>6}, filtered signal: {switch_signal*100: 3.0f}%, AI performance: {performance:4.1f}Hz {switch_msg}")
+    print(
+        f"{datetime.now()} Classification: {mapping[classification]:>6}, prob.: {probability*100:3.0f}%, filtered signal: {switch_signal*100: 3.0f}%, AI performance: {performance:4.1f}Hz {switch_msg}"
+    )
 
 # %%
