@@ -1,15 +1,13 @@
-# %%
+
 import importlib
 import random
-from multiprocessing import Pool
 from pathlib import Path
-from tqdm import tqdm
-import pandas as pd
 
-# %%
+import pandas as pd
+from tqdm import tqdm
+
 import process_mp3_file
 
-# %%
 train_ratio = 80  # %
 chunksize = 10  # s
 chunk_offset = 10  # s
@@ -17,7 +15,7 @@ dataset_folder = Path("nova_classifier") / "datasets"
 num_processors = 7
 random_seed = 42
 
-# %%
+
 if __name__ == "__main__":
     importlib.reload(process_mp3_file)
 
@@ -33,12 +31,12 @@ if __name__ == "__main__":
 
         # train data
         for f in tqdm(files[:n_train]):
-            output = process_mp3_file.process_single_file(f,chunksize=chunksize, chunk_offset=chunk_offset)
+            output = process_mp3_file.process_single_file(f, chunksize=chunksize, chunk_offset=chunk_offset)
             for chunk_feature in output:
                 features_train.append([chunk_feature, label])
 
         # test data
-        for f in tqdm(files[n_train : n_train + n_test]):
+        for f in tqdm(files[n_train: n_train + n_test]):
             output = process_mp3_file.process_single_file(f, chunksize=chunksize, chunk_offset=chunk_offset)
             for chunk_feature in output:
                 features_test.append([chunk_feature, label])
@@ -50,5 +48,3 @@ if __name__ == "__main__":
         features_test_df = pd.DataFrame(features_test, columns=["feature", "class_label"])
         features_test_df.to_pickle("nova_classifier/saved_features_test.pickle")
         print(f"Saved {len(features_train_df)} rows to disk for testing")
-# %%
-# output[0].shape

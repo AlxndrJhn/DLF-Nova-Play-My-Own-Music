@@ -141,3 +141,4 @@ cython_debug/
 data_chunks_df.pickle
 datasets/
 .cache-jahn.alexander
+.vscode/
