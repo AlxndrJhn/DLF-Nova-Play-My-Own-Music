@@ -6,14 +6,14 @@ from keras.optimizers import Adam
 from keras.utils import np_utils
 from sklearn import metrics
 
-def create_model():
+def create_model(input_size):
     num_labels = 2
     filter_size = 2
 
     # Construct model
     model = Sequential()
 
-    model.add(Dense(256, input_shape=(80,)))
+    model.add(Dense(256, input_shape=(input_size,)))
     model.add(Activation('relu'))
     model.add(Dropout(0.5))
 
@@ -27,7 +27,7 @@ def create_model():
     model.compile(loss='categorical_crossentropy', metrics=['accuracy'], optimizer='adam')
     return model
 
-def load_trained_model(weights_path):
-    model = create_model()
+def load_trained_model(weights_path, input_size):
+    model = create_model(input_size)
     model.load_weights(weights_path)
     return model
