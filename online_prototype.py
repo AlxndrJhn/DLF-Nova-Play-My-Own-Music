@@ -39,7 +39,8 @@ os.chdir(dname)
 
 
 def log(msg):
-    print(f"{datetime.now()} {msg}")
+    now = datetime.now().strftime("%d/%m/%Y, %H:%M:%S")
+    print(f"{now}: {msg}")
 
 
 # load model

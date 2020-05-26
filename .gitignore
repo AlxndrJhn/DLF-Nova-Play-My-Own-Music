@@ -142,3 +142,4 @@ data_chunks_df.pickle
 datasets/
 .cache-jahn.alexander
 .vscode/
+new_chunks/
