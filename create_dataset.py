@@ -12,9 +12,9 @@ import process_mp3_file
 # %%
 train_ratio = 80  # %
 chunksize = 10  # s
-chunk_offset = 1  # s
+chunk_offset = 10  # s
 dataset_folder = Path("nova_classifier") / "datasets"
-num_processors = 4
+num_processors = 7
 random_seed = 42
 
 # %%
@@ -33,13 +33,13 @@ if __name__ == "__main__":
 
         # train data
         for f in tqdm(files[:n_train]):
-            output = process_mp3_file.process_single_file(f)
+            output = process_mp3_file.process_single_file(f,chunksize=chunksize, chunk_offset=chunk_offset)
             for chunk_feature in output:
                 features_train.append([chunk_feature, label])
 
         # test data
         for f in tqdm(files[n_train : n_train + n_test]):
-            output = process_mp3_file.process_single_file(f)
+            output = process_mp3_file.process_single_file(f, chunksize=chunksize, chunk_offset=chunk_offset)
             for chunk_feature in output:
                 features_test.append([chunk_feature, label])
 

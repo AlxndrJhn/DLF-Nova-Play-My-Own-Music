@@ -1,15 +1,43 @@
+from time import time
+
 import librosa
 import numpy as np
 import soundfile as sf
+from spafe.features.gfcc import gfcc
+import spafe
+
 
 def extract_features(audio, sample_rate, f=None):
     if f:
-        audio, sample_rate = librosa.load(f,mono=False)
+        audio, sample_rate = librosa.load(f, mono=False)
 
-    mfccs1 = librosa.feature.mfcc(y=np.asfortranarray(audio[0,:]), sr=sample_rate, n_mfcc=40)
-    mfccsscaled1 = np.mean(mfccs1.T,axis=0)
+    # stereo to mono
+    if len(audio.shape) == 2:
+        audio = audio.sum(axis=0) / 2
 
-    # mfccs2 = librosa.feature.mfcc(y=np.asfortranarray(audio[1,:]), sr=sample_rate, n_mfcc=40)
-    # mfccsscaled2 = np.mean(mfccs2.T,axis=0)
+    audio = np.asfortranarray(audio)
 
-    return mfccsscaled1 #np.hstack((mfccsscaled1, mfccsscaled2))
+    # feature vector
+    mfccs = librosa.feature.mfcc(y=audio, sr=sample_rate, n_mfcc=20)
+    mfccs_scaled = np.mean(mfccs.T, axis=0)
+
+    # rather slow
+    try:
+        gfccs = gfcc(audio, num_ceps=20)
+        gfccs_scaled = np.mean(gfccs, axis=0)
+    except:
+        gfccs_scaled = np.zeros(20)
+        
+    hop_length = 2048
+    oenv = librosa.onset.onset_strength(y=audio, sr=sample_rate, hop_length=hop_length)
+    # tempogram = librosa.feature.tempogram(onset_envelope=oenv, sr=sample_rate,
+    #                                       hop_length=hop_length)
+
+    return np.hstack((mfccs_scaled, gfccs_scaled, oenv))
+
+
+if __name__ == "__main__":
+    y, sr = librosa.load(librosa.util.example_audio_file(), duration=10)
+    start = time()
+    res = extract_features(y, sr)
+    print(f"Performance: {1/(time()-start):.1f}Hz")

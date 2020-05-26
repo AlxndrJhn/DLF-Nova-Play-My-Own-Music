@@ -21,7 +21,7 @@ class ChopAndProcess(object):
 
 
 # %%
-def process_single_file(f, chunksize=10, chunk_offset=2):
+def process_single_file(f, chunksize, chunk_offset):
     # load file as audio
     audio = AudioSegment.from_mp3(f)
     sample_rate = 44100
