@@ -22,9 +22,9 @@ chunk_path = dataset_path / f"{dataset_id:02}_split"
 
 # %%
 # load model
-from simple_model import load_trained_model
+from complex2_model import load_trained_model
 
-model = load_trained_model("nova_classifier/model_saves/weights.best.basic_cnn_40.hdf5")
+model = load_trained_model("nova_classifier/model_saves/weights.best.deeper2_cnn_40.hdf5")
 model.summary()
 
 
@@ -79,9 +79,14 @@ import spotipy.util as util
 
 scope = "user-modify-playback-state"
 username = "jahn.alexander"
-token = util.prompt_for_user_token(username, scope, redirect_uri="http://127.0.0.1:9090")
-sp = spotipy.Spotify(auth=token)
-
+token = ''
+sp = ''
+def refresh_spotify():
+    global token
+    global sp
+    token = util.prompt_for_user_token(username, scope, redirect_uri="http://127.0.0.1:9090")
+    sp = spotipy.Spotify(auth=token)
+refresh_spotify()
 
 #%%
 def stop_music():
@@ -92,8 +97,11 @@ def stop_music():
 
 
 def start_music():
-    sp.start_playback()
-
+    try:
+        sp.start_playback()
+    except:
+        refresh_spotify()
+        sp.start_playback()
 
 stop_music()
 
@@ -164,7 +172,7 @@ while True:
     switch_msg = ""
     date = str(datetime.now()).replace(':','-').replace('.', '-')
     file_name = f"{date}_{mapping[classification]}.mp3"
-    if play_music and (switch_signal > 0.9 or (first_prediction and class_val == 1)):
+    if (play_music and switch_signal > 0.9) or (first_prediction and class_val == 1):
         first_prediction = False
         play_music = False
         switch_msg = "switch to radio"
@@ -172,7 +180,7 @@ while True:
         start_radio()
         cropped.export(file_name, format="mp3")
 
-    elif not play_music and (switch_signal < 0.1 or (first_prediction and class_val == 0)):
+    elif (not play_music and switch_signal < 0.1) or (first_prediction and class_val == 0):
         first_prediction = False
         play_music = True
         switch_msg = "switch to music"
