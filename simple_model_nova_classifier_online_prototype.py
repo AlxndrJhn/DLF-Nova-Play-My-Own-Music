@@ -29,7 +29,7 @@ chunk_length = 10  # seconds
 input_layer_size = 256
 model_name = 'weights.best.simple_cnn_more_features.hdf5'
 spotify_username = "jahn.alexander"
-switch_signal_factor = 0.6 # 0.1 quick switch, 0.9 slow switch
+switch_signal_factor = 0.3 # 0.1 quick switch, 0.9 slow switch
 
 # load model
 model = load_trained_model(f"nova_classifier/model_saves/{model_name}", input_layer_size)
