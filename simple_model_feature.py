@@ -2,9 +2,7 @@ from time import time
 
 import librosa
 import numpy as np
-import soundfile as sf
 from spafe.features.gfcc import gfcc
-import spafe
 
 
 def extract_features(audio, sample_rate, f=None):
@@ -25,13 +23,11 @@ def extract_features(audio, sample_rate, f=None):
     try:
         gfccs = gfcc(audio, num_ceps=20)
         gfccs_scaled = np.mean(gfccs, axis=0)
-    except:
+    except Exception:
         gfccs_scaled = np.zeros(20)
-        
+
     hop_length = 2048
     oenv = librosa.onset.onset_strength(y=audio, sr=sample_rate, hop_length=hop_length)
-    # tempogram = librosa.feature.tempogram(onset_envelope=oenv, sr=sample_rate,
-    #                                       hop_length=hop_length)
 
     return np.hstack((mfccs_scaled, gfccs_scaled, oenv))
 

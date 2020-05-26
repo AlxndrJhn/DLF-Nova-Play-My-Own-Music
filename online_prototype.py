@@ -24,7 +24,7 @@ url = "https://dradio-edge-209a-fra-lg-cdn.cast.addradio.de/dradio/nova/live/mp3
 chunk_length = 10  # seconds
 input_layer_size = 256
 model_name = "weights.best.simple_cnn_more_features.hdf5"
-spotify_username = "jahn.alexander"
+spotify_username = "myspotiusername"
 switch_signal_factor = 0.3  # 0.1 quick switch, 0.9 slow switch
 
 new_audio_chunk_folder = Path("new_chunks")
