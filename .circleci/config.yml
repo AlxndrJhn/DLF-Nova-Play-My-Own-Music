@@ -44,12 +44,19 @@ jobs:
       - image: circleci/python:3.7.5
     steps:
       - checkout
+
+      - run:
+          name: Poetry build
+          command: |
+            poetry build
+
       - run:
           name: init .pypirc
           command: |
             echo -e "[pypi]" >> ~/.pypirc
             echo -e "username = ${PYPI_USERNAME}" >> ~/.pypirc
             echo -e "password = ${PYPI_PASSWORD}" >> ~/.pypirc
+
       - run:
           name: upload to pypi
           command: |
