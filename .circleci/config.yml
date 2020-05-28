@@ -45,12 +45,22 @@ jobs:
     steps:
       - checkout
 
-      # Use `poetry publish` to Publish the package using username and password from CircleCI environment variables
-      # Which can be configured inside CircleCI's interface
       - run:
-          name: Push to PyPI
+          name: Poetry build
           command: |
-            poetry publish --build --username "${PYPI_USERNAME}" --password "${PYPI_PASSWORD}" --no-interaction
+            poetry build
+
+      - run:
+          name: init .pypirc
+          command: |
+            echo -e "[pypi]" >> ~/.pypirc
+            echo -e "username = ${PYPI_USERNAME}" >> ~/.pypirc
+            echo -e "password = ${PYPI_PASSWORD}" >> ~/.pypirc
+
+      - run:
+          name: upload to pypi
+          command: |
+            twine upload dist/* --verbose
 
 workflows:
   version: 2.1

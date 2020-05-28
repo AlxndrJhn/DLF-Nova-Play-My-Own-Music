@@ -1,8 +1,24 @@
 [tool.poetry]
 name = "DLF-Nova-Play-My-Own-Music"
-version = "0.1.0"
-description = ""
-authors = ["Alexander Jahn <jahn.alexander@gmail.com>"]
+version = "0.1.2"
+description = "Switches to Spotify if music is played on DLF Nova radio stream."
+authors = ["Alexander Jahn"]
+homepage = "https://github.com/AlxndrJhn/DLF-Nova-Play-My-Own-Music"
+repository = "https://github.com/AlxndrJhn/DLF-Nova-Play-My-Own-Music"
+license = "MIT"
+readme = "README.md"
+keywords = ["flake8", "markdown", "lint"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.7",
+    "Topic :: Internet",
+    "Topic :: Multimedia :: Sound/Audio"
+]
+include = [
+    "LICENSE",
+]
 
 [tool.poetry.dependencies]
 python = "^3.7"
@@ -15,6 +31,7 @@ sklearn = "^0.0"
 pandas = "^1.0.3"
 python-vlc = "^3.0.9113"
 click = "^7.1.2"
+twine = "^3.1.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

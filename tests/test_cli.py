@@ -2,7 +2,7 @@ from dlf_nova_play_my_own_music import __version__
 
 
 def test_version():
-    assert __version__ == '0.1.0'
+    assert __version__ == '0.1.2'
 
 
 def test_typical_application():
