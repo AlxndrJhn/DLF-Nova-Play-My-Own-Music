@@ -1,0 +1,79 @@
+version: 2.1
+
+jobs:
+  build-and-test:
+    docker:
+      - image: circleci/python:3.7.5
+
+    steps:
+      - checkout
+      # Cache can be tricky at first, but this means
+      # Please, restore my cache (what is actually on the cache will be defined later)
+      # if the text key `deps-{{ checksum "poetry.lock" }}` changes (and it WILL change every time poetry.lock is updated since we rely on its checksum)
+      # and poetry.lock is updated every time we add a new dependency to our project
+      - restore_cache:
+          keys:
+            - deps-{{ checksum "poetry.lock" }}
+
+      # Let's install the dependencies
+      - run:
+          name: Install Dependencies
+          command: |
+            poetry install
+
+      # Save's the specified path as a cache. This is the path Poetry uses to install the dependencies
+      # So if you don't install anything new, this folder won't change and the cache will be effective
+      - save_cache:
+          key: deps-{{ checksum "poetry.lock" }}
+          paths:
+            - /home/circleci/.cache/pypoetry/virtualenvs
+
+      - run:
+          name: Run flake8
+          command: |
+            poetry run flake8 .
+
+      - run:
+          name: Run mypy
+          command: |
+            poetry run mypy .
+
+  # This is the definition of another job, the one we use to publish the package to PyPI
+  deployment:
+    docker:
+      - image: circleci/python:3.7.5
+    steps:
+      - checkout
+
+      # Use `poetry publish` to Publish the package using username and password from CircleCI environment variables
+      # Which can be configured inside CircleCI's interface
+      - run:
+          name: Push to PyPI
+          command: |
+            poetry publish --build --username "${PYPI_USERNAME}" --password "${PYPI_PASSWORD}" --no-interaction
+
+workflows:
+  version: 2.1
+  build-and-test-workflow:
+    jobs:
+      - build-and-test
+
+  # The deployment workflow publishes the package
+  deployment-workflow:
+    jobs:
+      - build-and-test:
+          filters:
+            tags:
+              only: /v[0-9]+(\.[0-9]+)*/
+            branches:
+              ignore: /.*/
+
+      # Runs the deployment job, just with the tags as well
+      - deployment:
+          requires:
+            - build-and-test
+          filters:
+              tags:
+                only: /v[0-9]+(\.[0-9]+)*/
+              branches:
+                ignore: /.*/
