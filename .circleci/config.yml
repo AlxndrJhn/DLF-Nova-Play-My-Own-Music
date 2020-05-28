@@ -51,6 +51,11 @@ jobs:
             poetry build
 
       - run:
+          name: Install twine
+          command: |
+            sudo pip3 install twine
+
+      - run:
           name: init .pypirc
           command: |
             echo -e "[pypi]" >> ~/.pypirc
