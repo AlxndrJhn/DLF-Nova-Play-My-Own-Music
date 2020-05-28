@@ -1,8 +1,9 @@
-from keras.models import Sequential
-from keras.layers import Dense, Dropout, Activation
+from keras.layers import Activation, Dense, Dropout  # type: ignore
+from keras.models import Model, Sequential  # type: ignore
 
 
-def create_model(input_size):
+def create_model(input_size: int) -> Model:
+    """Create sequential keras model with `input_size` input size."""
     num_labels = 2
 
     # Construct model
@@ -25,7 +26,8 @@ def create_model(input_size):
     return model
 
 
-def load_trained_model(weights_path, input_size):
+def load_trained_model(weights_path: str, input_size: int) -> Model:
+    """Create model an load weights from path."""
     model = create_model(input_size)
     model.load_weights(weights_path)
     return model

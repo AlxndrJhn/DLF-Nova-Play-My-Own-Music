@@ -1,12 +1,11 @@
-
 import importlib
 import random
 from pathlib import Path
 
-import pandas as pd
-from tqdm import tqdm
+import pandas as pd  # type: ignore
+from tqdm import tqdm  # type: ignore
 
-import process_mp3_file
+from . import process_mp3_file
 
 train_ratio = 80  # %
 chunksize = 10  # s
@@ -31,20 +30,28 @@ if __name__ == "__main__":
 
         # train data
         for f in tqdm(files[:n_train]):
-            output = process_mp3_file.process_single_file(f, chunksize=chunksize, chunk_offset=chunk_offset)
+            output = process_mp3_file.process_single_file(
+                f, chunksize=chunksize, chunk_offset=chunk_offset
+            )
             for chunk_feature in output:
                 features_train.append([chunk_feature, label])
 
         # test data
-        for f in tqdm(files[n_train: n_train + n_test]):
-            output = process_mp3_file.process_single_file(f, chunksize=chunksize, chunk_offset=chunk_offset)
+        for f in tqdm(files[n_train : n_train + n_test]):
+            output = process_mp3_file.process_single_file(
+                f, chunksize=chunksize, chunk_offset=chunk_offset
+            )
             for chunk_feature in output:
                 features_test.append([chunk_feature, label])
 
-        features_train_df = pd.DataFrame(features_train, columns=["feature", "class_label"])
+        features_train_df = pd.DataFrame(
+            features_train, columns=["feature", "class_label"]
+        )
         features_train_df.to_pickle("nova_classifier/saved_features_train.pickle")
         print(f"Saved {len(features_train_df)} rows to disk for training")
 
-        features_test_df = pd.DataFrame(features_test, columns=["feature", "class_label"])
+        features_test_df = pd.DataFrame(
+            features_test, columns=["feature", "class_label"]
+        )
         features_test_df.to_pickle("nova_classifier/saved_features_test.pickle")
         print(f"Saved {len(features_train_df)} rows to disk for testing")

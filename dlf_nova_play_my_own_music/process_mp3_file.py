@@ -1,10 +1,10 @@
 import math
 from multiprocessing import Pool
 
-import numpy as np
-from pydub import AudioSegment
+import numpy as np  # type: ignore
+from pydub import AudioSegment  # type: ignore
 
-from simple_model_feature import extract_features
+from .simple_model_feature import extract_features
 
 
 class ChopAndProcess(object):
@@ -38,6 +38,3 @@ def process_single_file(f, chunksize, chunk_offset):
         )
         features.extend(results)
     return features
-
-
-# features = process_single_file(r"C:\Users\jahna\sandbox_37\nova_classifier\datasets\m\COSBY - Spaceship.mp3", 10, 10)

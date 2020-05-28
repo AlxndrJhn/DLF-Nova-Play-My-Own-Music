@@ -54,7 +54,6 @@ Based on this [this medium article](https://medium.com/@mikesmales/sound-classif
 mfccs = librosa.feature.mfcc(y=audio, sr=sample_rate, n_mfcc=20)
 mfccs_scaled = np.mean(mfccs.T, axis=0)
 
-# rather slow
 try:
     gfccs = gfcc(audio, num_ceps=20)
     gfccs_scaled = np.mean(gfccs, axis=0)

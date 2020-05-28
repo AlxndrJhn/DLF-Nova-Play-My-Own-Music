@@ -1,0 +1,31 @@
+[tool.poetry]
+name = "DLF-Nova-Play-My-Own-Music"
+version = "0.1.0"
+description = ""
+authors = ["Alexander Jahn <jahn.alexander@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+pydub = "^0.24.0"
+Keras = "^2.3.1"
+spafe = "^0.1.2"
+spotipy = "^2.12.0"
+numpy = "^1.18.4"
+sklearn = "^0.0"
+pandas = "^1.0.3"
+python-vlc = "^3.0.9113"
+click = "^7.1.2"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+black = "^19.10b0"
+flake8 = "^3.8.2"
+mypy = "^0.770"
+rope = "^0.17.0"
+
+[tool.poetry.scripts]
+dlfnova = "dlf_nova_play_my_own_music.cli:main"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"

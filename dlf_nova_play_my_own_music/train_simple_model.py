@@ -3,18 +3,18 @@ import os
 from datetime import datetime
 from pathlib import Path
 
-import numpy as np
-import pandas as pd
-from keras.callbacks import ModelCheckpoint
-from keras.utils import to_categorical
-from sklearn.preprocessing import LabelEncoder
+import numpy as np  # type: ignore
+import pandas as pd  # type: ignore
+from keras.callbacks import ModelCheckpoint  # type: ignore
+from keras.utils import to_categorical  # type: ignore
+from sklearn.preprocessing import LabelEncoder  # type: ignore
 
-import simple_model
+from . import simple_model
 
 # change to script dir
 abspath = os.path.abspath(__file__)
-dname = os.path.dirname(abspath)
-os.chdir(dname)
+dir_name = os.path.dirname(abspath)
+os.chdir(dir_name)
 
 # read datasets
 train_dataset = pd.read_pickle("saved_features_train.pickle")

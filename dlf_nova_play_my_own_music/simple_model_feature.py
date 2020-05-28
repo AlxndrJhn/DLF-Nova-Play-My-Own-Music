@@ -1,11 +1,14 @@
 from time import time
+from typing import Optional
 
-import librosa
-import numpy as np
-from spafe.features.gfcc import gfcc
+import librosa  # type: ignore
+import numpy as np  # type: ignore
+from spafe.features.gfcc import gfcc  # type: ignore
 
 
-def extract_features(audio, sample_rate, f=None):
+def extract_features(
+    audio: np.ndarray, sample_rate: int, f: Optional[str] = None
+) -> np.ndarray:
     if f:
         audio, sample_rate = librosa.load(f, mono=False)
 
