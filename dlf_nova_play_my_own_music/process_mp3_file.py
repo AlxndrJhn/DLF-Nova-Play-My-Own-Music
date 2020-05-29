@@ -8,13 +8,15 @@ from .simple_model_feature import extract_features
 
 
 class ChopAndProcess(object):
-    def __init__(self, chunksize, chunk_offset, audio, sample_rate):
+    def __init__(
+        self, chunksize: int, chunk_offset: int, audio: AudioSegment, sample_rate: int
+    ):
         self.chunksize = chunksize
         self.chunk_offset = chunk_offset
         self.audio = audio
         self.sample_rate = sample_rate
 
-    def __call__(self, i):
+    def __call__(self, i: int):
         offset = i * self.chunk_offset * 1000
         subaudiosegment = self.audio[offset : offset + self.chunksize * 1000]
         samples = [float(x) for x in subaudiosegment.get_array_of_samples()]
@@ -22,7 +24,7 @@ class ChopAndProcess(object):
         return extract_features(stacked, self.sample_rate)
 
 
-def process_single_file(f, chunksize, chunk_offset):
+def process_single_file(f: str, chunksize: int, chunk_offset: int):
     # load file as audio
     audio = AudioSegment.from_mp3(f)
     sample_rate = 44100

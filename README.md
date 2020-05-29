@@ -1,4 +1,6 @@
 [![AlxndrJhn](https://circleci.com/gh/AlxndrJhn/DLF-Nova-Play-My-Own-Music.svg?style=svg)](https://app.circleci.com/pipelines/github/AlxndrJhn/DLF-Nova-Play-My-Own-Music)
+[![codecov](https://codecov.io/gh/AlxndrJhn/DLF-Nova-Play-My-Own-Music/branch/master/graph/badge.svg)](https://codecov.io/gh/AlxndrJhn/DLF-Nova-Play-My-Own-Music)
+
 # DLF-Nova Play My Own Music
 The [DLF nova](https://www.deutschlandfunknova.de/) [playlist](https://open.spotify.com/playlist/5qE59dOhR3JtRE8YThsjkO) is just a few hours long, leading to a lot of repetitions if you listen long enough. This is kind of annoying, because the news-bits are quite interesting.
 So I programmed a script that detects music/news and switches to spotify during the music parts on the radio.
@@ -17,7 +19,7 @@ This project is work in progress, I want to make it easier to use.
     2. Save `SPOTIPY_CLIENT_SECRET` in your environment (example `2c12e5161ace0476c8f2abc70a924ac76`)
 2. Find your spotify username and insert it in `spotify_username` in `online_prototype.py`
 3. Install with `pip install DLF-Nova-Play-My-Own-Music`
-4. `dlfnova -su my.spotifyusername` to start
+4. `dlfnova -su my.spotifyusername` to start.
 
 After some setup messages it should generate logs like this
 

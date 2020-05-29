@@ -144,3 +144,5 @@ datasets/
 .vscode/
 new_chunks/
 .cache-myspotiusername
+cov.xml
+process.yml

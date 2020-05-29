@@ -21,7 +21,7 @@ from .spotify_ctrl import SpotifyManager
 # force Keras to use CPU
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
 os.environ["CUDA_VISIBLE_DEVICES"] = ""
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
 
 
 @click.command()
@@ -54,6 +54,9 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
     "--chunk-output-folder",
     help="Set to a path to save all transition audio chunks for manual review.",
 )
+@click.option(
+    "--debug", is_flag=True, help="If set, stops after on prediction (for testing)"
+)
 @click.option("-v", "--verbose", count=True)
 def main(
     spot_client_id,
@@ -61,6 +64,7 @@ def main(
     spot_username,
     stream,
     chunk_output_folder,
+    debug,
     verbose,
 ):
     """Starts the automatic music/news detection and starts streaming"""
@@ -198,6 +202,9 @@ def main(
         state = f"filtered signal: {switch_signal*100: 3.0f}%, "
         perf = f"AI performance: {performance:4.1f}Hz {switch_msg}"
         log(class_txt + proba_txt + state + perf)
+
+        if debug:
+            break
 
 
 def log(msg):

@@ -31,6 +31,12 @@ sklearn = "^0.0"
 pandas = "^1.0.3"
 python-vlc = "^3.0.9113"
 click = "^7.1.2"
+pytest-mock = "^3.1.0"
+pytest-cov = "^2.9.0"
+librosa = "^0.7.2"
+matplotlib = "^3.2.1"
+numba = "0.48.0"
+tensorflow = "^2.2.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
@@ -38,6 +44,7 @@ black = "^19.10b0"
 flake8 = "^3.8.2"
 mypy = "^0.770"
 rope = "^0.17.0"
+pytest-datadir = "^1.3.1"
 
 [tool.poetry.scripts]
 dlfnova = "dlf_nova_play_my_own_music.cli:main"

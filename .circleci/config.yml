@@ -1,5 +1,6 @@
 version: 2.1
-
+orbs:
+  codecov: codecov/codecov@1.0.2
 jobs:
   build-and-test:
     docker:
@@ -21,6 +22,10 @@ jobs:
           command: |
             poetry install
 
+      - run: sudo apt-get update -y
+      - run: sudo apt-get install -y libsndfile1-dev
+      - run: sudo apt-get install ffmpeg
+
       # Save's the specified path as a cache. This is the path Poetry uses to install the dependencies
       # So if you don't install anything new, this folder won't change and the cache will be effective
       - save_cache:
@@ -38,6 +43,13 @@ jobs:
           command: |
             poetry run mypy .
 
+      - run:
+          name: Run pytest
+          command: |
+            poetry run pytest
+
+      - codecov/upload:
+          file: cov.xml
   # This is the definition of another job, the one we use to publish the package to PyPI
   deployment:
     docker:
